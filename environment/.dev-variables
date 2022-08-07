@@ -1,4 +1,3 @@
-APP_NAME_DEV = Dev app
+APP_NAME_DEV = Shelter Dev
 APP_SUFFIX_DEV = .dev
-SENTRY_DSN_DEV = value
-SENTRY_ENVIRONMENT_DEV = development
+APP_BASE_URL=https://refugeeshelter.azurewebsites.net/

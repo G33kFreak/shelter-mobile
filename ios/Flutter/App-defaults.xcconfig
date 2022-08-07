@@ -1,0 +1,3 @@
+APP_NAME=Shelter Dev
+APP_SUFFIX=.dev
+APP_BASE_URL=https://refugeeshelter.azurewebsites.net/

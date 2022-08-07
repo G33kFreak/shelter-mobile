@@ -1,4 +1,3 @@
-APP_NAME_PROD = Prod app
+APP_NAME_PROD = Shelter
 APP_SUFFIX_PROD = 
-SENTRY_DSN_PROD = value
-SENTRY_ENVIRONMENT_PROD = production
+APP_BASE_URL=https://refugeeshelter.azurewebsites.net/
