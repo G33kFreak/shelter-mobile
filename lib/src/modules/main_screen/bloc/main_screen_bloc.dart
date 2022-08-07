@@ -1,53 +1,43 @@
+import 'dart:async';
+
 import 'package:autoequal/autoequal.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:template/src/repositories/user_repository/user_repository.dart';
+import 'package:location/location.dart';
+import 'package:template/src/services/location/location_service.dart';
 
 part 'main_screen_bloc.g.dart';
 part 'main_screen_event.dart';
 part 'main_screen_state.dart';
 
 class MainScreenBloc extends Bloc<MainScreenEvent, MainScreenState> {
-  final UserRepository userRepository;
+  final LocationService _locationService;
 
-  MainScreenBloc({required this.userRepository}) : super(InitState()) {
-    on<InitEvent>(_init);
-    on<AddUserEvent>(_saveUser);
-    on<RemoveUserEvent>(_removeUser);
-    on<ReportSentryError>(_handleReportSentryError);
+  StreamSubscription<LocationData>? _userLocationSubscription;
+
+  MainScreenBloc({required LocationService locationService})
+      : _locationService = locationService,
+        super(const MainScreenState()) {
+    on<InitEvent>(_onInitEvent);
+    on<UpdateLocation>(_onUpdateLocation);
   }
 
-  Future<void> _init(InitEvent event, Emitter<MainScreenState> emit) async {
-    final user = await userRepository.getUser('userKey');
-    emit(MainScreenState(user: user));
-  }
-
-  Future<void> _saveUser(
-    AddUserEvent event,
-    Emitter<MainScreenState> emit,
-  ) async {
-    final user = User(pk: 1, firstName: 'Jan', lastName: 'Nowak');
-    await userRepository.saveUser('userKey', user);
-    emit(MainScreenState(user: user));
-  }
-
-  Future<void> _removeUser(
-    RemoveUserEvent event,
-    Emitter<MainScreenState> emit,
-  ) async {
-    final user = await userRepository.getUser('userKey');
-    if (user != null) {
-      await userRepository.deleteUser('userKey', user);
-      emit(const MainScreenState());
-    }
-  }
-
-  void _handleReportSentryError(
-    ReportSentryError event,
+  void _onInitEvent(
+    InitEvent event,
     Emitter<MainScreenState> emit,
   ) {
-    // This exception will be noted by global bloc observer,
-    // implemented in `services/sentry.dart`.
-    throw Exception('test exception');
+    _userLocationSubscription =
+        _locationService.location.listen(_locationListener);
+  }
+
+  void _locationListener(LocationData location) {
+    add(UpdateLocation(locationData: location));
+  }
+
+  void _onUpdateLocation(
+    UpdateLocation event,
+    Emitter<MainScreenState> emit,
+  ) {
+    emit(state.copyWith(locationData: event.locationData));
   }
 }

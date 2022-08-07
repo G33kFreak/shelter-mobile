@@ -11,12 +11,9 @@ abstract class MainScreenEvent extends Equatable {
 class InitEvent extends MainScreenEvent with _$InitEventAutoequalMixin {}
 
 @autoequalMixin
-class AddUserEvent extends MainScreenEvent with _$AddUserEventAutoequalMixin {}
+class UpdateLocation extends MainScreenEvent
+    with _$UpdateLocationAutoequalMixin {
+  final LocationData locationData;
 
-@autoequalMixin
-class RemoveUserEvent extends MainScreenEvent
-    with _$RemoveUserEventAutoequalMixin {}
-
-@autoequalMixin
-class ReportSentryError extends MainScreenEvent
-    with _$ReportSentryErrorAutoequalMixin {}
+  const UpdateLocation({required this.locationData});
+}

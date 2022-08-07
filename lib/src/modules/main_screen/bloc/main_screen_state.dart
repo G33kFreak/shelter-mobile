@@ -2,10 +2,12 @@ part of 'main_screen_bloc.dart';
 
 @autoequalMixin
 class MainScreenState extends Equatable with _$MainScreenStateAutoequalMixin {
-  final User? user;
-  const MainScreenState({
-    this.user,
-  });
-}
+  final LocationData? locationData;
 
-class InitState extends MainScreenState {}
+  const MainScreenState({
+    this.locationData,
+  });
+
+  MainScreenState copyWith({LocationData? locationData}) =>
+      MainScreenState(locationData: locationData ?? this.locationData);
+}
